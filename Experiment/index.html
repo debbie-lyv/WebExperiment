@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Coding Assignment </title>
+    <script src="jsPsych-6.3.1/jspsych.js"></script>
+    <script src="jsPsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jsPsych-6.3.1/plugins/jspsych-html-button-response.js"></script>
+    <script src="jsPsych-6.3.1/plugins/jspsych-fullscreen.js"></script>
+    <script src="jsPsych-6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <script src="https://debbie-lyv.github.io/jsPsychSheet/jspsychsheet.js"></script>
+    <link rel="stylesheet" href="https://debbie-lyv.github.io/jsPsychSheet/jspsychsheet.css">
+    <link rel="stylesheet" href="jsPsych-6.3.1/css/jspsych.css" type="text/css">
+    <style>
+        img {
+            animation: fadeIn .1s linear;
+            opacity: 1;
+            width: 80vw;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body></body>
+<script>
+
+    var timeline = [];
+
+    // Getting idnum, cond and type through the URL
+    var idnum = jsPsych.data.getURLVariable('idnum');
+    var cond = jsPsych.data.getURLVariable('cond');
+    var type = jsPsych.data.getURLVariable('type');
+
+    // for testing
+    if (!idnum) {
+        idnum = 1;
+    }
+    if (!cond) {
+        cond = 1;
+    }
+    if (!type) {
+        type = 1;
+    }
+
+    var fullscreen_on = {
+        type: "fullscreen",
+        fullscreen_mode: true,
+        message: "For this part of the experiment, it is important that your window fills out as much of the screen as possible.<br><br>",
+        data: { screen: "fullscreen_on" },
+    }
+    timeline.push(fullscreen_on);
+
+    var intro = {
+        type: "html-button-response",
+        stimulus: "Hello, we are interested in your opinions about a variety of things! When you are ready to start the experiment please press start to begin. You can continue in 3 seconds.",
+        choices: ["Start"],
+        data: { screen: "intro" },
+        on_load: function (trial) {
+            // Hide the button initially
+            var button = document.querySelector(".jspsych-btn");
+            if (button) {
+                button.style.visibility = "hidden";
+
+                // Show the button after 3 seconds
+                setTimeout(function () {
+                    button.style.visibility = "visible";
+                }, 3000);
+            }
+        }
+    };
+
+    timeline.push(intro);
+
+    var instructionText = `
+        <p>In this part of the experiment, we are looking at how people make simple but quick judgments. For each trial, you will see a brief presentation of a simple painting.</p>
+        <p style = "color: #756ed4;"}>Your job is to judge the pleasantness of the painting.</p>
+        <p><b>Each painting will remain on the screen for a brief time. When prompted, you should respond by indicating whether you think the painting you saw is more or less pleasant than average.</b></p>
+        <p style = "color: #f2766b;"}>If it's more pleasant than average, press the 'K' key.</p>
+        <p style = "color: #f2766b;">If it's less pleasant than average, press the 'D' key.</p>
+        <p>When the study is fully loaded, the button below will activate. Click it to indicate you have read these instructions, and are ready to continue to the second page of instructions. (Refresh the page if the button does not become active.)</p>
+        <p style = 'text-decoration: underline'><b>Please only proceed after you have CAREFULLY read these instructions and are definitely sure that you are ready!</b></p>
+    `;
+
+    var instructions = {
+        type: "html-button-response",
+        stimulus: instructionText,
+        choices: ["Next"],
+        data: { screen: "instructions" },
+    };
+    timeline.push(instructions);
+
+    var instructionText2 = `
+        <p>Immediately before each painting you rate, a photograph will appear very briefly.<br><br>
+        It is important to note that having just seen a positive photo can sometimes make you judge the painting more positively than you otherwise would. 
+        Likewise, having just seen a negative photo can make you judge the painting more negatively. Because we are interested in how people can avoid being biased, 
+        please try your absolute best not to let the photos bias your judgment of the paintings. Give us an honest assessment of the paintings, regardless of the photos that precede them. <br><br>
+        When you are ready to begin, place your fingers on the 'd' (less pleasant) and 'k' (more pleasant) keys, and press the space bar.
+        </p>
+`;
+    var instructions2 = {
+        type: "html-keyboard-response",
+        stimulus: instructionText2,
+        choices: [" "],
+        data: { screen: "instructions2" },
+    };
+    timeline.push(instructions2);
+
+
+    var fixation = {
+        type: 'html-keyboard-response',
+        stimulus: '<div style="font-size:60px;">+</div>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: function () {
+            return jsPsych.randomization.sampleWithoutReplacement([225, 250, 275], 1)[0];
+        },
+        data: {
+            screen: "fixation",
+            idnum: idnum,
+            cond: cond,
+            type: type
+        },
+    };
+
+    function primeStimuli(cond, isTarget) {
+        var img_path = "";
+        // Target type
+        if (isTarget) {
+            if (cond === 1) {
+                img_path = "Images/Type Images/Cat" + cond + ".jpg";
+            } else if (cond === 2) {
+                img_path = "Images/Type Images/Dog" + cond + ".jpg";
+            } else {
+                console.error("Invalid condition value:", cond);
+                return;
+            }
+        } else {
+            // Control type
+            var random_number = randomNum(cond);
+            if (cond === 1) {
+                img_path = "Images/Type Images/Cat" + random_number + ".jpg";
+            } else if (cond === 2) {
+                img_path = "Images/Type Images/Dog" + random_number + ".jpg";
+            } else {
+                console.error("Invalid condition value:", cond);
+                return;
+            }
+        }
+        //console.log(img_path)
+        return img_path;
+    }
+
+    // Any number except control type
+    function randomNum(exclude) {
+        var num;
+        do {
+            num = Math.floor(Math.random() * 5) + 1;
+        } while (num === exclude);
+        return num;
+    }
+
+    function targetStimulus() {
+        var random_number = Math.floor(Math.random() * 40) + 1;
+        var img_path = "Images/Neutral Images/pic" + random_number + ".png";
+        //console.log(img_path);
+        return { path: img_path, number: random_number };
+    }
+
+    var prime_onset = {
+        type: 'image-keyboard-response',
+        stimulus: function () {
+            //console.log(jsPsych.timelineVariable('isTarget'));
+            return primeStimuli(parseInt(cond), jsPsych.timelineVariable('isTarget'));
+        },
+        choices: jsPsych.NO_KEYS,
+        trial_duration: function () {
+            return jsPsych.randomization.sampleWithoutReplacement([65, 75, 85], 1)[0];
+        },
+        data: {
+            screen: 'prime_onset',
+        }
+    };
+
+    var prime_offset = {
+        type: "html-keyboard-response",
+        stimulus: "",
+        choices: jsPsych.NO_KEYS,
+        trial_duration: function () {
+            return jsPsych.randomization.sampleWithoutReplacement([100, 125, 150], 1)[0];
+        },
+    }
+
+    var target_onset = {
+        type: 'image-keyboard-response',
+        stimulus: function () {
+            var stimulusData = targetStimulus();
+            return stimulusData.path;
+        },
+        choices: jsPsych.NO_KEYS,
+        trial_duration: function () {
+            return jsPsych.randomization.sampleWithoutReplacement([85, 100, 115], 1)[0];
+        },
+        data: {
+            screen: 'target_onset',
+        },
+    };
+
+    var startTime;
+    var trialNum = 0;
+    var response = {
+        type: "html-keyboard-response",
+        stimulus: "If the painting was more pleasant than average, press 'k'<br><br> if it was less pleasant than average, press 'd'",
+        choices: ["k", "d"],
+        on_start: function (trial) {
+            // Start the timer when the trial starts
+            startTime = Date.now();
+            //console.log("start of response")
+            trialNum++;
+        },
+        on_finish: function (data) {
+            // Calculate response time
+            var endTime = Date.now();
+            var responseTime = endTime - startTime;
+
+            // All data for this trial
+            data.screen = "response";
+            var stimulusData = targetStimulus();
+            data.image = "pic" + stimulusData.number + ".png";
+            data.trialType = jsPsych.timelineVariable('isTarget') ? 'target' : 'control';
+            data.order = trialNum;
+            data.answer = data.response;
+            data.responseTime = responseTime;
+        }
+    };
+
+    var numTrialsPerCondition = 2;
+    var numConditions = 2; // True or false conditions
+    var timeline_variables = [];
+
+    for (var i = 0; i < numConditions; i++) {
+        var condition = (i % 2 === 0); // true or false
+        for (var j = 0; j < numTrialsPerCondition; j++) {
+            timeline_variables.push({ isTarget: condition });
+        }
+    }
+
+    // Shuffle the timeline variables array
+    jsPsych.randomization.shuffle(timeline_variables);
+
+    var exp_flow = {
+        timeline: [fixation, prime_onset, prime_offset, target_onset, response],
+        timeline_variables: timeline_variables,
+    };
+    timeline.push(exp_flow);
+
+    function formatData(data) {
+        var formattedData = [];
+
+        data.forEach(function (trialData) {
+            if (trialData.screen === "response") {
+                var rowData = {
+                    idnum: idnum,
+                    cond: cond,
+                    type: type,
+                    order: trialData.order,
+                    image: trialData.image,
+                    trialType: trialData.trialType,
+                    response: trialData.response,
+                    responseTime: trialData.responseTime
+                };
+                formattedData.push(rowData);
+            }
+        });
+        return formattedData;
+    }
+
+    var end = {
+        type: 'html-button-response',
+        stimulus: "You have finished the experiment.<br><br><p>Please click the button to be redirected to Qualtrics.</p><br>",
+        choices: ["Click Here"],
+        on_finish: function () {
+            var data = jsPsych.data.get().values();
+            var formattedData = formatData(data);
+            var csv = Papa.unparse(formattedData);
+            console.log(csv);
+
+            // Create new csv file
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+
+            // Download the csv
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute('download', 'data.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            googleSheetsUrl = "https://script.google.com/macros/s/AKfycbxgdhyYhjRTB4QfHqi3OdX2ydp1yoSmByDX_t9EneJS1QhqySUga7LXN5xEP_C6CRtE/exec";
+            jsPsychSheet.uploadData(googleSheetsUrl, formattedData);
+
+            // Redirect to qualtrics
+            var url = 'https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3eGwFDSbXv6tSbc' +
+                '?idnum=' + idnum +
+                '&cond=' + cond +
+                '&type=' + type;
+            window.location.href = url;
+        }
+    };
+    timeline.push(end);
+
+    jsPsych.init({
+        timeline: timeline,
+    });
+
+</script>
+
+</html>
