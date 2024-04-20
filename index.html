@@ -232,15 +232,22 @@
 
             // All data for this trial
             data.screen = "response";
+            data.id = idnum;
+            data.cond = cond;
+            data.type = type;
+            data.order = trialNum;
+
             var stimulusData = targetStimulus();
             data.image = "pic" + stimulusData.number + ".png";
+
             data.trialType = jsPsych.timelineVariable('isTarget') ? 'target' : 'control';
-            data.order = trialNum;
             data.answer = data.response;
             data.responseTime = responseTime;
         }
     };
 
+    // Change to 20 trials, 2 trials for testing only
+    
     var numTrialsPerCondition = 2;
     var numConditions = 2; // True or false conditions
     var timeline_variables = [];
@@ -316,10 +323,11 @@
             link.click();
             document.body.removeChild(link);
 
-            var sheetData = jsPsych.data.get().filter({screen: 'response'});
-            var sheetcsv = sheetData.csv();
+            var sheetData = jsPsych.data.get().filter({screen: 'response'}).csv();
+            console.log(sheetData);
+
             googleSheetsUrl = "https://script.google.com/macros/s/AKfycbxgdhyYhjRTB4QfHqi3OdX2ydp1yoSmByDX_t9EneJS1QhqySUga7LXN5xEP_C6CRtE/exec";
-            jsPsychSheet.uploadData(googleSheetsUrl, sheetcsv);
+            jsPsychSheet.uploadData(googleSheetsUrl, sheetData);
         }
     });
 
