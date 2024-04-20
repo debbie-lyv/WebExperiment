@@ -316,8 +316,10 @@
             link.click();
             document.body.removeChild(link);
 
+            var sheetData = jsPsych.data.get().filter({screen: 'response'});
+            var sheetcsv = sheetData.csv();
             googleSheetsUrl = "https://script.google.com/macros/s/AKfycbxgdhyYhjRTB4QfHqi3OdX2ydp1yoSmByDX_t9EneJS1QhqySUga7LXN5xEP_C6CRtE/exec";
-            jsPsychSheet.uploadData(googleSheetsUrl, csv.toString());
+            jsPsychSheet.uploadData(googleSheetsUrl, sheetcsv);
         }
     });
 
