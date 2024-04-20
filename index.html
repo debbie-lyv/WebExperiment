@@ -304,7 +304,7 @@
             document.body.removeChild(link);
 
             googleSheetsUrl = "https://script.google.com/macros/s/AKfycbxgdhyYhjRTB4QfHqi3OdX2ydp1yoSmByDX_t9EneJS1QhqySUga7LXN5xEP_C6CRtE/exec";
-            jsPsychSheet.uploadData(googleSheetsUrl, jsPsych.data.get().csv());
+            jsPsychSheet.uploadData(googleSheetsUrl, csv.toString());
 
             // Redirect to qualtrics
             var url = 'https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3eGwFDSbXv6tSbc' +
