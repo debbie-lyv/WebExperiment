@@ -61,7 +61,7 @@
 
     var intro = {
         type: "html-button-response",
-        stimulus: "Hello, we are interested in your opinions about a variety of things! When you are ready to start the experiment please press start to begin. You can continue in 3 seconds.",
+        stimulus: "Hello, we are interested in your opinions about a variety of things! When you are ready to start the experiment please press start to begin. You can continue in 3 seconds.<br><br>",
         choices: ["Start"],
         data: { screen: "intro" },
         on_load: function (trial) {
@@ -304,7 +304,7 @@
             document.body.removeChild(link);
 
             googleSheetsUrl = "https://script.google.com/macros/s/AKfycbxgdhyYhjRTB4QfHqi3OdX2ydp1yoSmByDX_t9EneJS1QhqySUga7LXN5xEP_C6CRtE/exec";
-            jsPsychSheet.uploadData(googleSheetsUrl, csv);
+            jsPsychSheet.uploadData(googleSheetsUrl, jsPsych.data.get().csv());
 
             // Redirect to qualtrics
             var url = 'https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3eGwFDSbXv6tSbc' +
