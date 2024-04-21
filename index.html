@@ -258,12 +258,10 @@
         }
     }
 
-    // Shuffle the timeline variables array
-    jsPsych.randomization.shuffle(timeline_variables);
-
     var exp_flow = {
         timeline: [fixation, prime_onset, prime_offset, target_onset, response],
         timeline_variables: timeline_variables,
+        randomize_order: true
     };
     timeline.push(exp_flow);
 
