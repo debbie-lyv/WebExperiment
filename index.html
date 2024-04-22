@@ -180,6 +180,7 @@
             //console.log(jsPsych.timelineVariable('isTarget'));
             return primeStimuli(parseInt(cond), jsPsych.timelineVariable('isTarget'));
         },
+        stimulus_width: 500,
         choices: jsPsych.NO_KEYS,
         trial_duration: function () {
             return jsPsych.randomization.sampleWithoutReplacement([65, 75, 85], 1)[0];
@@ -204,6 +205,7 @@
             var stimulusData = targetStimulus();
             return stimulusData.path;
         },
+        stimulus_width: 500,
         choices: jsPsych.NO_KEYS,
         trial_duration: function () {
             return jsPsych.randomization.sampleWithoutReplacement([85, 100, 115], 1)[0];
