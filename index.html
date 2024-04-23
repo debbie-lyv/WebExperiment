@@ -281,10 +281,10 @@
         return formattedData;
     }
 
-    var end = {
-        type: 'html-button-response',
-        stimulus: "You have finished the experiment.<br><br><p>Please click the button to be redirected to Qualtrics.</p><br>",
-        choices: ["Click Here"],
+    var uploadingData = {
+        type: "html-keyboard-response",
+        stimulus: "",
+        choices: jsPsych.NO_KEYS,
         on_load: function() {
             var data = jsPsych.data.get().values();
             var formattedData = formatData(data);
@@ -307,7 +307,14 @@
             googleSheetsUrl = "https://script.google.com/macros/s/AKfycbxgdhyYhjRTB4QfHqi3OdX2ydp1yoSmByDX_t9EneJS1QhqySUga7LXN5xEP_C6CRtE/exec";
             jsPsychSheet.uploadData(googleSheetsUrl, sheetData);
         },
-        on_start: function () {
+    }
+    timeline.push(uploadingData);
+
+    var end = {
+        type: 'html-button-response',
+        stimulus: "You have finished the experiment.<br><br><p>Please click the button to be redirected to Qualtrics.</p><br>",
+        choices: ["Click Here"],
+        on_finish: function () {
             // Redirect to qualtrics
             var url = 'https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3eGwFDSbXv6tSbc' +
                 '?idnum=' + idnum +
