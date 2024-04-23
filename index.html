@@ -156,7 +156,6 @@
         return num;
     }
 
-    var img_path = "";
     function targetStimulus() {
         var random_number = Math.floor(Math.random() * 40) + 1;
         var img_path = "https://debbie-lyv.github.io/WebExperiment/Images/Neutral%20Images/pic" + random_number + ".png";
@@ -188,10 +187,11 @@
         },
     }
 
+    var stimulusData;
     var target_onset = {
         type: 'image-keyboard-response',
         stimulus: function () {
-            var stimulusData = targetStimulus();
+            stimulusData = targetStimulus();
             return stimulusData;
         },
         stimulus_width: 500,
@@ -228,7 +228,7 @@
             data.type = type;
             data.order = trialNum;
 
-            data.image = img_path;
+            data.image = stimulusData;
 
             data.trialType = jsPsych.timelineVariable('isTarget') ? 'target' : 'control';
             //console.log(jsPsych.timelineVariable('isTarget'));
