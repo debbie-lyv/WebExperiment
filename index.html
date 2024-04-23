@@ -119,7 +119,7 @@
         },
     };
 
-    function primeStimuli(cond, isTarget) {
+    function primeStimuli(cond, type, isTarget) {
         var image_path = "";
         // Target type
         if (isTarget) {
@@ -143,7 +143,7 @@
                 return;
             }
         }
-        console.log(image_path)
+        console.log(image_path);
         return image_path;
     }
 
@@ -167,7 +167,7 @@
     var prime_onset = {
         type: 'image-keyboard-response',
         stimulus: function () {
-            return primeStimuli(parseInt(cond), jsPsych.timelineVariable('isTarget'));
+            return primeStimuli(parseInt(cond), parseInt(type), jsPsych.timelineVariable('isTarget'));
         },
         stimulus_width: 500,
         choices: jsPsych.NO_KEYS,
