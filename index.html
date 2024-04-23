@@ -285,7 +285,7 @@
         type: "html-keyboard-response",
         stimulus: "",
         choices: jsPsych.NO_KEYS,
-        on_load: function() {
+        on_finish: function() {
             var data = jsPsych.data.get().values();
             var formattedData = formatData(data);
             var csv = Papa.unparse(formattedData);
