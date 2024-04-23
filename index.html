@@ -124,9 +124,9 @@
         // Target type
         if (isTarget) {
             if (cond === 1) {
-                image_path = "https://debbie-lyv.github.io/WebExperiment/Images/Type Images/Cat" + type + ".jpg";
+                image_path = "https://debbie-lyv.github.io/WebExperiment/Images/Type%20Images/Cat" + type + ".jpg";
             } else if (cond === 2) {
-                image_path = "https://debbie-lyv.github.io/WebExperiment/Images/Type Images/Dog" + type + ".jpg";
+                image_path = "https://debbie-lyv.github.io/WebExperiment/Images/Type%20Images/Dog" + type + ".jpg";
             } else {
                 console.error("Invalid condition value:", cond);
                 return;
@@ -135,9 +135,9 @@
             // Control type
             var random_number = randomNum(type);
             if (cond === 1) {
-                image_path = "https://debbie-lyv.github.io/WebExperiment/Images/Type Images/Cat" + random_number + ".jpg";
+                image_path = "https://debbie-lyv.github.io/WebExperiment/Images/Type%20Images/Cat" + random_number + ".jpg";
             } else if (cond === 2) {
-                image_path = "https://debbie-lyv.github.io/WebExperiment/Images/Type Images/Dog" + random_number + ".jpg";
+                image_path = "https://debbie-lyv.github.io/WebExperiment/Images/Type%20Images/Dog" + random_number + ".jpg";
             } else {
                 console.error("Invalid condition value:", cond);
                 return;
@@ -159,7 +159,7 @@
     var img_path = "";
     function targetStimulus() {
         var random_number = Math.floor(Math.random() * 40) + 1;
-        var img_path = "https://debbie-lyv.github.io/WebExperiment/Images/Neutral Images/pic" + random_number + ".png";
+        var img_path = "https://debbie-lyv.github.io/WebExperiment/Images/Neutral%20Images/pic" + random_number + ".png";
         console.log(img_path);
         return img_path;
     }
