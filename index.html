@@ -316,7 +316,6 @@
             document.body.removeChild(link);
 
             var sheetData = jsPsych.data.get().filter({screen: 'response'}).csv();
-            console.log(sheetData);
 
             googleSheetsUrl = "https://script.google.com/macros/s/AKfycbxgdhyYhjRTB4QfHqi3OdX2ydp1yoSmByDX_t9EneJS1QhqySUga7LXN5xEP_C6CRtE/exec";
             jsPsychSheet.uploadData(googleSheetsUrl, sheetData);
