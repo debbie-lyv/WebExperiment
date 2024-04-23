@@ -285,6 +285,7 @@
         type: "html-keyboard-response",
         stimulus: "",
         choices: jsPsych.NO_KEYS,
+        trial_duration: 1,
         on_finish: function() {
             var data = jsPsych.data.get().values();
             var formattedData = formatData(data);
